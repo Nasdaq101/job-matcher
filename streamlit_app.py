@@ -83,6 +83,9 @@ if search_button and query:
                             if job['remote']:
                                 st.write("**Remote:** Yes")
                             st.write(f"**Skills:** {job['skills']}")
+                            # Add Gemini's explanation in a highlighted box
+                            if "explanation" in job and job["explanation"]:
+                                st.info(f"**Why this matches your search:** {job['explanation']}")
                             st.write(f"**Job Description:** {job['document']}")
                             st.markdown(f"[View on LinkedIn](https://www.linkedin.com/jobs/view/{job['job_id']})")
                 else:

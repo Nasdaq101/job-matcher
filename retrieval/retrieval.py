@@ -2,6 +2,8 @@ import chromadb
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import os
+import shutil
+from vector_db.build_vector_db import build_vector_database
 
 class JobRetriever:
     def __init__(self, db_path="./chroma_db"):
@@ -13,14 +15,27 @@ class JobRetriever:
         print("Loaded embedding model: all-MiniLM-L6-v2")
         
         # Connect to the Chroma database
-        self.client = chromadb.PersistentClient(path=db_path)
         try:
+            self.client = chromadb.PersistentClient(path=db_path)
             self.collection = self.client.get_collection("job_listings")
             count = self.collection.count()
             print(f"Connected to existing collection 'job_listings' with {count} documents")
         except Exception as e:
             print(f"Error connecting to collection: {e}")
-            raise
+            
+            if os.path.exists(db_path):
+                shutil.rmtree(db_path)
+            
+            # Rebuild the database
+            build_vector_database()
+            
+            # Try connecting again
+            self.client = chromadb.PersistentClient(path=db_path)
+            self.collection = self.client.get_collection("job_listings")
+            count = self.collection.count()
+            print(f"Rebuilt collection 'job_listings' with {count} documents")
+        
+        
     
     def get_embedding(self, text):
         """Convert text to embedding vector"""

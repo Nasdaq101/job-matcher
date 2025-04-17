@@ -1,9 +1,9 @@
-pandas
 numpy
-sentence-transformers
-faiss-cpu
-openai
-langchain
-flask
+pandas
 chromadb
+sentence-transformers
+fastapi
+uvicorn
 streamlit
+google-genai
+python-dotenv

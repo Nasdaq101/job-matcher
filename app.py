@@ -4,6 +4,12 @@ from pydantic import BaseModel
 from typing import List, Optional, Union
 import uvicorn
 from retrieval.retrieval import JobRetriever
+from agent.gemini_client import GeminiService
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Define data models
 class JobSearchRequest(BaseModel):
@@ -29,6 +35,7 @@ app = FastAPI(title="LinkedIn Job Search API")
 
 # Initialize the job retriever
 retriever = JobRetriever()
+gemini_service = GeminiService()
 
 # Define API endpoints
 @app.post("/search", response_model=List[JobResult])
@@ -47,6 +54,24 @@ async def search_jobs(request: JobSearchRequest):
         filters, 
         n_results=request.num_results
     )
+
+        # Convert job_id to string in each result
+    for result in results:
+        result["job_id"] = str(result["job_id"])
+    
+    # Get explanations from Gemini
+    if results:
+        explanations = gemini_service.explain_job_matches(
+            query=request.query,
+            jobs=results,
+            skills=request.skills
+        )
+        
+        # Add explanations to results
+        for result in results:
+            job_id = result["job_id"]
+            if job_id in explanations:
+                result["explanation"] = explanations[job_id]
     
     return results
 
@@ -66,3 +91,4 @@ async def root():
 # Run the API server when the script is executed
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
+    
