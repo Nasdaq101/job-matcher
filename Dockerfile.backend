@@ -1,0 +1,18 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy requirements first
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy all files (this includes ChromaDB data if it's in your project)
+COPY . .
+# Remove the frontend file from backend image
+RUN rm -f streamlit_app.py
+
+# Expose backend port
+EXPOSE 8080
+
+# Run the backend with port 8080
+CMD ["python", "-m", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080"]

@@ -1,0 +1,20 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+# Copy requirements first
+COPY requirements_frontend.txt requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy only the frontend file
+COPY streamlit_app.py .
+COPY .env .
+
+# Expose frontend port
+EXPOSE 8080
+
+# Set the API URL to the deployed backend URL
+ENV API_URL="https://linkedin-rag-service-2436450958.us-west1.run.app"
+
+# Run the frontend with port 8080
+CMD ["streamlit", "run", "streamlit_app.py", "--server.port=8080", "--server.address=0.0.0.0"]

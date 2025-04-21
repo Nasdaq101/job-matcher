@@ -1,7 +1,6 @@
 # streamlit_app.py (Streamlit frontend)
 import streamlit as st
 import requests
-import json
 import os
 
 # Default for local development
