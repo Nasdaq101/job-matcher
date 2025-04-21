@@ -7,3 +7,4 @@ __pycache__/
 venv/
 chroma_db/
 .env
+data/jobs_sample.csv
