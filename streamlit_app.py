@@ -4,8 +4,8 @@ import requests
 import json
 import os
 
-# API URL (configurable for different environments)
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+# Default for local development
+API_URL = os.environ.get("API_URL", "http://localhost:8000")
 
 # Set up the Streamlit page
 st.set_page_config(page_title="LinkedIn Job Matcher", layout="wide")

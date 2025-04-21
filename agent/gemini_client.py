@@ -2,6 +2,16 @@ import logging
 import os
 from google import genai
 from typing import List, Dict
+import logging
+import traceback
+
+# Configure logging to show all information
+logging.basicConfig(
+    level=logging.INFO, 
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    force=True  # This will override any existing configuration
+)
+logger = logging.getLogger(__name__)
 
 class GeminiService:
     def __init__(self):
@@ -60,8 +70,25 @@ class GeminiService:
                     model="gemini-2.0-flash-001",
                     contents=prompt,
                 )
-                explanation = response.choices[0].message.content.strip()
+                # Debug the response object structure
+                logger.info(f"Response type: {type(response)}")
+                logger.info(f"Response attributes: {dir(response)}")
+                
+                # Extract the explanation based on the actual response structure
+                if hasattr(response, 'text'):
+                    explanation = response.text
+                elif hasattr(response, 'parts') and response.parts:
+                    explanation = response.parts[0].text
+                else:
+                    # Inspect the response more deeply
+                    logger.info(f"Full response: {response}")
+                    explanation = "Could not extract explanation from response."
+                
+                explanation = explanation.strip()
                 job_explanations[str(job['job_id'])] = explanation
+                
+                logger.info(f"Generated explanation for job {job['job_id']}: {explanation}")
+
             except Exception as e:
                 print(f"Error getting explanation for job {job['job_id']}: {e}")
                 job_explanations[str(job['job_id'])] = "No explanation available."

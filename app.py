@@ -29,6 +29,7 @@ class JobResult(BaseModel):
     job_id: Union[str, int]
     job_url: str
     document: str
+    explanation: Optional[str] = None
 
 # Initialize FastAPI app
 app = FastAPI(title="LinkedIn Job Search API")
@@ -91,4 +92,3 @@ async def root():
 # Run the API server when the script is executed
 if __name__ == "__main__":
     uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
-    

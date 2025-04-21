@@ -1,4 +1,3 @@
-# File: Dockerfile
 FROM python:3.10-slim
 
 WORKDIR /app
@@ -10,8 +9,11 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY . .
 
-# Expose the port
-EXPOSE 8080
+# Expose ports (different ports for each service)
+EXPOSE 8000 8501
 
-# Command to run the application
-CMD ["python", "app.py"]
+# Create the run.py file
+COPY run.py .
+
+# Run the application using our Python launcher
+CMD ["python", "run.py"]
