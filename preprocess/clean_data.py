@@ -1,5 +1,6 @@
 import pandas as pd
-from utils import extract_skills_efficient, clean_text, is_software_job, normalize_skills, clean_combined_skills
+from .utils import extract_skills_efficient, clean_text, is_software_job, normalize_skills, clean_combined_skills
+from normalizers import normalize_location, normalize_title
 
 # Read the original data
 df = pd.read_csv('data/raw_data/postings.csv', quoting=1)
@@ -15,12 +16,15 @@ print(f"Record count after filtering: {len(df)}")
 
 # Optional: Filter for software engineering jobs only
 # Uncomment the following lines if you want to focus on software engineering jobs
-df['is_software'] = df.apply(lambda row: is_software_job(row['title'], row['description']), axis=1)
-df = df[df['is_software'] == True]
-print(f"Software engineering jobs count: {len(df)}")
+# df['is_software'] = df.apply(lambda row: is_software_job(row['title'], row['description']), axis=1)
+# df = df[df['is_software'] == True]
+# print(f"Software engineering jobs count: {len(df)}")
 
 # Handle missing values for other fields
 df['location'] = df['location'].fillna('Not Specified')
+# Normalize locations
+print("Normalizing location data...")
+df['location_normalized'] = df['location'].apply(normalize_location)
 df['remote_allowed'] = df['remote_allowed'].apply(
     lambda x: bool(x) if not pd.isna(x) else False
 )
@@ -28,6 +32,7 @@ df['job_posting_url'] = df['job_posting_url'].fillna('')
 
 # Clean title
 df['title_clean'] = df['title'].apply(clean_text)
+df['title_normalized'] = df['title_clean'].apply(normalize_title)
 
 # Extract skills from descriptions
 print("Extracting skills from job descriptions...")
@@ -57,20 +62,18 @@ df['description_clean'] = df['description'].apply(clean_text)
 # Create a combined text field for generating embeddings
 df['combined_text'] = (
     "Title: " + df['title_clean'] + 
-    " Company: " + df['company_name'] + 
-    " Location: " + df['location'] + 
-    " Skills: " + df['combined_skills']
+    ", Location: " + df['location'] +
+    ", Skills: " + df['combined_skills']
 )
-
-# Create a sample dataset
-sample_size = min(10000, len(df))
 
 # Select only the columns you need for your RAG system
 columns_to_keep_final = [
     'job_id', 
     'company_name', 
     'title_clean',  # Clean version of the title
-    'location', 
+    'title_normalized', 
+    'location',
+    'location_normalized', 
     'job_posting_url',
     'remote_allowed',
     'combined_skills', 
@@ -78,7 +81,7 @@ columns_to_keep_final = [
 ]
 
 # Create a sample with only necessary columns
-df_sample = df.sample(n=min(sample_size, len(df)), random_state=42)[columns_to_keep_final]
+df_sample = df[columns_to_keep_final]
 
 # Display a few examples
 print("\nSample records:")

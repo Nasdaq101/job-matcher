@@ -21,7 +21,7 @@ def build_vector_database():
     # Load your data with error handling
     try:
         print("Loading job data and embeddings...")
-        df = pd.read_pickle('linkedin_jobs_with_embeddings.pkl')
+        df = pd.read_pickle('data/tmp/linkedin_jobs_with_embeddings.pkl')
     except Exception as e:
         print(f"Error loading data: {e}")
         raise
@@ -44,7 +44,7 @@ def build_vector_database():
     # Prepare your data for insertion
     ids = [str(i) for i in range(len(df))]
     documents = df['combined_text'].tolist()
-    metadatas = df[['job_id', 'company_name', 'title_clean', 'location', 'remote_allowed', 'combined_skills']].to_dict('records')
+    metadatas = df[['job_id', 'company_name', 'title_clean', 'location', 'location_normalized', 'remote_allowed', 'combined_skills']].to_dict('records')
     
     # Get embeddings
     embeddings = np.array(df['embedding'].tolist())
