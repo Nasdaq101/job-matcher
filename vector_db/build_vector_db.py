@@ -38,7 +38,13 @@ def build_vector_database():
         print("Creating new collection 'job_listings'")
         collection = client.create_collection(
             name="job_listings",
-            metadata={"hnsw:space": "cosine"}
+            metadata={"hnsw:space": "cosine"},
+            configuration={
+                "hnsw": {
+                    "space": "cosine",
+                    "num_threads": int(os.getenv("CHROMA_HNSW_NUM_THREADS", 4))
+                }
+            }
         )
     
     # Prepare your data for insertion
