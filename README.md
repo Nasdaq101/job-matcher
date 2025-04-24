@@ -55,6 +55,10 @@ This application will be deployed on Google Cloud Platform (GCP) to meet the pro
 git clone https://github.com/CongYidan/linkedin-rag-job-matcher.git
 cd linkedin-rag-job-matcher
 
+# create .env file
+Create a .env file and add your Google API key to it.
+export GOOGLE_API_KEY='your-google-api-key'
+
 # clean up data
 bash scripts/clean_up.sh
 
