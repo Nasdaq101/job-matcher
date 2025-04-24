@@ -2,9 +2,11 @@
 
 set -e
 
-echo "Creating virtual environment..."
-python3 -m venv venv
-source venv/bin/activate  # On Windows: use venv\Scripts\activate
+if [ -z "$IN_DOCKER" ]; then
+  echo "Creating virtual environment..."
+  python3 -m venv venv
+  source venv/bin/activate
+fi
 
 echo "Installing dependencies..."
 pip install --upgrade pip
@@ -30,11 +32,3 @@ echo "Building vector database..."
 python3 -m preprocess.clean_data
 python3 -m embedding.vector_embedding
 python3 -m vector_db.build_vector_db
-
-echo "Starting backend server..."
-python3 app.py &
-
-sleep 3  # Wait a few seconds to ensure the backend is up
-
-echo "Launching Streamlit app..."
-streamlit run streamlit_app.py

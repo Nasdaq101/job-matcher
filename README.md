@@ -48,7 +48,7 @@ This application will be deployed on Google Cloud Platform (GCP) to meet the pro
 
 *Note: Specific GCP services will be determined during the implementation phase.*
 
-## 💻 Development
+## 💻 Development(localhost)
 
 ```bash
 # Clone this repository
@@ -62,11 +62,33 @@ export GOOGLE_API_KEY='your-google-api-key'
 # clean up data
 bash scripts/clean_up.sh
 
+# setup dependencies and database
+bash scripts/setup.sh 
+
 # start application end to end
-bash scripts/setup_and_run.sh 
+bash scripts/run.sh 
 
 # stop application
 bash scripts/stop_app.sh
+
+```
+
+## 💻 Development(dockerization)
+
+```bash
+# Clone this repository
+git clone https://github.com/CongYidan/linkedin-rag-job-matcher.git
+cd linkedin-rag-job-matcher
+
+# create .env file
+Create a .env file and add your Google API key to it.
+export GOOGLE_API_KEY='your-google-api-key'
+
+# build docker
+docker build -f Dockerfile -t linkedin-rag-job-matcher:latest .
+
+# start docker container
+docker run -p 8000:8000 -p 8501:8501 linkedin-rag-job-matcher:latest
 
 ```
 

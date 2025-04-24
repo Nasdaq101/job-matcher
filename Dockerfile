@@ -1,19 +1,22 @@
 FROM python:3.10-slim
 
+ENV IN_DOCKER=true
+
+RUN apt-get update && apt-get install -y tar \
+    && apt-get clean
+
 WORKDIR /app
 
-# Copy requirements first to leverage Docker caching
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY . /app
 
-# Copy the application code
-COPY . .
+RUN chmod +x /app/scripts/setup_docker.sh /app/scripts/run.sh
 
-# Expose ports (different ports for each service)
-EXPOSE 8000 8501
+RUN /app/scripts/setup_docker.sh
 
-# Create the run.py file
-COPY run.py .
+RUN mkdir -p /app/chroma_db && \
+    tar -xzf /app/chroma_db_backup.tar.gz -C /app/chroma_db --strip-components=1 && \
+    rm /app/chroma_db_backup.tar.gz
 
-# Run the application using our Python launcher
-CMD ["python", "run.py"]
+EXPOSE 8000
+
+CMD ["/app/scripts/run.sh"]
