@@ -47,7 +47,7 @@ echo "GOOGLE_API_KEY='your-google-api-key'" >> .env
 docker build -f Dockerfile -t linkedin-rag-job-matcher:latest .
 
 # start docker container
-docker run -p 8000:8000 -p 8501:8501 linkedin-rag-job-matcher:latest
+docker run --rm -it -p 8000:8000 -p 8501:8501 linkedin-rag-job-matcher:latest
 
 ```
 
