@@ -9,45 +9,6 @@ This application helps job seekers find relevant LinkedIn opportunities by:
 - Highlighting factors influencing job relevance (skills match, industry trends, etc.)
 - Providing explainable recommendations with proper citations to source data
 
-## 🌟 Key Features
-
-- **Advanced Query Processing**: Handles natural language questions about job opportunities
-- **Personalized Recommendations**: Matches jobs based on user skills and location preferences
-- **Semantic Search**: Goes beyond keyword matching with embedding-based retrieval
-- **Explainable Results**: Highlights why specific jobs match user requirements
-- **Citation Support**: References original job listing sources for verification
-- **User-Friendly Interface**: Streamlined experience for job exploration
-
-## 🛠️ Technical Architecture
-
-### Data Pipeline
-- **Data Source**: LinkedIn Job Postings dataset (2023-2024) from Kaggle
-- **Preprocessing**: Cleaning, normalization, and structured extraction of job features
-- **Vectorization**: Sentence-BERT embeddings using 'all-MiniLM-L6-v2' model for semantic matching
-- **Storage**: Vector database (FAISS) for efficient similarity search
-- **Sample Data**: Pre-processed sample data included in the repository
-
-### RAG System Components
-- **Retriever**: Embedding-based retrieval with sentence-window approach
-- **Context Processing**: Auto-merging of relevant chunks from same job posting
-- **Generator**: Google Vertex AI-Gemini for synthesizing job recommendations
-- **Citations**: Linking recommendations to original LinkedIn postings
-
-### LLM Integration
-- Google Vertex AI-Gemini for response generation
-- Advanced context processing for relevant job recommendations
-- Natural language explanations of job matches
-
-## 🚀 Deployment
-
-This application will be deployed on Google Cloud Platform (GCP) to meet the project requirements. The deployment strategy may include:
-
-- Containerized application hosting (such as Google Cloud Run)
-- Data storage solutions
-- Google Vertex AI for LLM integration
-
-*Note: Specific GCP services will be determined during the implementation phase.*
-
 ## 💻 Development(localhost)
 
 ```bash
@@ -55,9 +16,8 @@ This application will be deployed on Google Cloud Platform (GCP) to meet the pro
 git clone https://github.com/CongYidan/linkedin-rag-job-matcher.git
 cd linkedin-rag-job-matcher
 
-# create .env file
-Create a .env file and add your Google API key to it.
-export GOOGLE_API_KEY='your-google-api-key'
+# create .env file and add your Google API key, replace "your-google-api-key" with your actual key
+echo "GOOGLE_API_KEY='your-google-api-key'" >> .env
 
 # clean up data
 bash scripts/clean_up.sh
@@ -80,9 +40,8 @@ bash scripts/stop_app.sh
 git clone https://github.com/CongYidan/linkedin-rag-job-matcher.git
 cd linkedin-rag-job-matcher
 
-# create .env file
-Create a .env file and add your Google API key to it.
-export GOOGLE_API_KEY='your-google-api-key'
+# create .env file and add your Google API key, replace "your-google-api-key" with your actual key
+echo "GOOGLE_API_KEY='your-google-api-key'" >> .env
 
 # build docker
 docker build -f Dockerfile -t linkedin-rag-job-matcher:latest .
@@ -92,10 +51,47 @@ docker run -p 8000:8000 -p 8501:8501 linkedin-rag-job-matcher:latest
 
 ```
 
+## 🌟 Key Features
+
+- **Advanced Query Processing**: Handles natural language questions about job opportunities
+- **Personalized Recommendations**: Matches jobs based on user skills and location preferences
+- **Semantic Search**: Goes beyond keyword matching with embedding-based retrieval
+- **Explainable Results**: Highlights why specific jobs match user requirements
+- **Citation Support**: References original job listing sources for verification
+- **User-Friendly Interface**: Streamlined experience for job exploration
+
+## 🛠️ Technical Architecture
+
+### Data Pipeline
+- **Data Source**: LinkedIn Job Postings dataset (2023-2024) from Kaggle
+- **Preprocessing**: Cleaning, normalization, and structured extraction of job features
+- **Vectorization**: Sentence-BERT embeddings using 'TechWolf/JobBERT-v2' model for semantic matching
+- **Storage**: Vector database (ChromaDB) for efficient similarity search
+- **Sample Data**: Pre-processed sample data included in the repository
+
+### RAG System Components
+- **Retriever**: Embedding-based retrieval with sentence-window approach
+- **Context Processing**: Auto-merging of relevant chunks from same job posting
+- **Generator**: Google Vertex AI-Gemini for synthesizing job recommendations
+- **Citations**: Linking recommendations to original LinkedIn postings
+
+### LLM Integration
+- Google Vertex AI-Gemini for response generation
+- Advanced context processing for relevant job recommendations
+- Natural language explanations of job matches
+
+## 🚀 Deployment
+
+This application will be deployed on Google Cloud Platform (GCP) to meet the project requirements. The deployment strategy includes:
+
+- Containerized application hosting (Google Cloud Run)
+- Data storage solutions (Google Cloud Storage Buckets)
+- Google Vertex AI for LLM integration
+
 ## 🚀 Usage
 
-1. Access the web interface at `http://localhost:8000`
-2. Enter your query (e.g., "Remote NLP job in Boston")
+1. Access the web interface at `http://localhost:8501`
+2. Enter your query (e.g., "Remote software engineer job in San Francisco")
 3. Optionally specify additional filters (skills, location)
 4. Review personalized job recommendations with explanation of matches
 
