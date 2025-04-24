@@ -14,7 +14,7 @@ RUN chmod +x /app/scripts/setup_docker.sh /app/scripts/run.sh
 RUN /app/scripts/setup_docker.sh
 
 RUN mkdir -p /app/chroma_db && \
-    tar -xzf /app/chroma_db_backup.tar.gz -C /app/chroma_db --strip-components=1 && \
+    tar -xzf /app/chroma_db_backup.tar.gz -C /app/ --strip-components=1 && \
     rm /app/chroma_db_backup.tar.gz
 
 EXPOSE 8000
