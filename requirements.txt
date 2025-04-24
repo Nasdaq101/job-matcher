@@ -28,3 +28,6 @@ geopy
 
 # AI tools
 google-genai
+
+# Raw data
+gdown

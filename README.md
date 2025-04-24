@@ -55,15 +55,15 @@ This application will be deployed on Google Cloud Platform (GCP) to meet the pro
 git clone https://github.com/CongYidan/linkedin-rag-job-matcher.git
 cd linkedin-rag-job-matcher
 
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
+# clean up data
+bash scripts/clean_up.sh
 
-# Install dependencies
-pip install -r requirements.txt
+# start application end to end
+bash scripts/setup_and_run.sh 
 
-# Start the application locally
-python app.py
+# stop application
+bash scripts/stop_app.sh
+
 ```
 
 ## 🚀 Usage
