@@ -8,3 +8,4 @@ venv/
 chroma_db/
 .env
 data/jobs_sample.csv
+*.log
