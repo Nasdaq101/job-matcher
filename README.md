@@ -102,13 +102,6 @@ Our system is evaluated using the RAG triad of metrics:
 - **Groundedness**: Ensuring recommendations strictly reference LinkedIn data
 - **Answer Relevance**: Quality of final job recommendations for user needs
 
-## 👥 Team & Contributions
-
-- **Yidan Cong**
-- **Dongjun Xie**
-- **Yunfei Zhou**
-- **Siyi Gao**
-
 ## 📚 References
 
 1. [LinkedIn Job Postings Dataset (2023-2024)](https://www.kaggle.com/datasets/arshkon/linkedin-job-postings) on Kaggle
